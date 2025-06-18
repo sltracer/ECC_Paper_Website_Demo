@@ -5,67 +5,74 @@
     <title>三元纠错码</title>
     <script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"></script>
     <style>
-        /* ==================== 全局样式 ==================== */
+        /* ==================== 全局基础样式 ==================== */
         body {
-        max-width: 800px;
-        margin: 20px auto;
-        padding: 20px;
-        font-family: sans-serif;
-        line-height: 1.6;
-        color: #333;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            font-family: sans-serif;
+            line-height: 1.6;
+            color: #333;
         }
-
-        /* ==================== 布局样式 ==================== */
-        .page-container {
-        display: flex;
-        align-items: flex-start;
-        gap: 20px;
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-        }
-
-        /* ==================== 标题和文本样式 ==================== */
-        .paper-title {
-        text-align: center;
-        font-size: 2em;
-        color: #2c3e50;
-        margin: 0 0 20px;
-        font-weight: 600;
-        letter-spacing: -0.5px;
-        }
-
-        .authors {
-        text-align: center;
-        margin-bottom: 20px;
-        font-size: 1.1em;
-        color: #7f8c8d;
-        }
-
-        .author {
-        display: inline-block;
-        margin: 0 10px;
-        }
-
-        .separator {
-        color: #bdc3c7;
-        font-weight: 300;
-        }
+        /* ==================== 文字与标题样式 ==================== */
 
         h1 { font-size: 1.6em; margin-bottom: 20px; }
         h2 { font-size: 1.3em; margin: 1em 0 0.5em; }
         h3 { font-size: 1.1em; margin: 1em 0 0.5em; }
         sub { vertical-align: baseline; font-size: 0.8em; }
 
-        /* ==================== 功能模块样式 ==================== */
+        .paper-title {
+            text-align: center;
+            font-size: 2em;
+            color: #2c3e50;
+            margin: 0;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .authors {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            color: #7f8c8d;
+        }
+
+        .author {
+            display: inline-block;
+            margin: 0 10px;
+        }
+
+        .separator {
+            color: #bdc3c7;
+            font-weight: 300;
+        }
+
+        .input-instructions {
+            font-size: 0.9em;
+            color: #666;
+            margin: 8px 0 16px;
+        }
+
+        /* ==================== 布局与容器样式 ==================== */
+        .page-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
         /* 主内容区 */
         .d4-section {
-        flex: 1;
-        margin: 20px 0;
-        padding: 15px;
-        border: 2px solid #ddd;
-        border-radius: 6px;
+            flex: 1;
+            margin: 20px 0;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
         }
+
+        /* ==================== 折叠面板（details）样式 ==================== */
 
         /* 折叠面板 */
         details.operation-section {
@@ -83,7 +90,6 @@
         position: relative;
         }
 
-
         details.operation-section summary::before {
                 content: "▶";
                 position: absolute;
@@ -97,158 +103,93 @@
                 content: "▼";
                 }    
 
+        /* ==================== 编码 / 解码模块 ==================== */
 
         /* 编码/解码区块 */
         .encode-section,
         .decode-section {
-        margin-top: 20px;
-        padding: 15px;
-        background: #f8f8f8;
-        border-radius: 4px;
-        border: 1px solid #eee;
-        }
-
-        .input-instructions {
-        font-size: 0.9em;
-        color: #666;
-        margin: 8px 0 16px;
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f8f8;
+            border-radius: 4px;
+            border: 1px solid #eee;
         }
 
         /* ==================== 表格样式 ==================== */
         .analysis-table {
-        margin: 20px 0;
+            margin: 20px 0;
         }
 
         .analysis-table table {
-        border-collapse: collapse;
-        width: 100%;
-        margin: 15px auto;
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px auto;
         }
 
         .analysis-table th,
         .analysis-table td {
-        border: 1px solid #000;
-        padding: 8px;
-        text-align: center;
-        vertical-align: middle;
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: center;
+            vertical-align: middle;
         }
 
         .analysis-table caption {
-        font-weight: bold;
-        margin-bottom: 10px;
+            font-weight: bold;
+            margin-bottom: 10px;
         }
 
         .clickable-case {
-        cursor: pointer;
-        transition: all 0.2s ease;
-        min-width: 80px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 80px;
         }
 
         .clickable-case:hover {
-        background-color: rgba(0, 51, 255, 0.08);
+            background-color: rgba(0, 51, 255, 0.08);
         }
 
         .clickable-case.active {
-        background-color: rgba(0, 51, 255, 0.15);
-        box-shadow: inset 0 0 0 2px #0033ff;
+            background-color: rgba(0, 51, 255, 0.15);
+            box-shadow: inset 0 0 0 2px #0033ff;
         }
 
-        /* ==================== 侧边面板样式 ==================== */
-        /* 通用面板样式 */
-        .qa-panel,
-        .definition-panel {
-        position: fixed;
-        top: 0;
-        right: -350px;
-        width: 260px;
-        height: 100vh;
-        background: white;
-        box-shadow: -2px 0 10px rgba(0,0,0,0.1);
-        transition: right 0.3s ease;
-        z-index: 1000;
-        padding: 20px;
-        overflow-y: auto;
-        }
-
-        .qa-panel.active,
-        .definition-panel.active {
-        right: 0;
-        }
-
-        /* 内容区域 */
-        .qa-content,
-        .definition-content {
-        padding-top: 20px;
-        }
-
-        .qa-item,
-        .definition-item {
-        margin-bottom: 15px;
-        padding-bottom: 15px;
-        border-bottom: 1px solid #eee;
-        }
-
-        .qa-question,
-        .definition-term {
-        font-weight: bold;
-        color: #2c3e50;
-        margin-bottom: 5px;
-        }
-
-        .qa-answer,
-        .definition-description {
-        color: #7f8c8d;
-        font-size: 0.9em;
-        line-height: 1.5;
-        }
-
-        /* 切换按钮 */
-        .qa-toggle,
-        .definition-toggle {
-        cursor: pointer;
-        padding: 6px 12px;
-        background: #f0f0f0;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 14px;
-        transition: all 0.3s;
-        }
-
-        .qa-toggle:hover,
-        .definition-toggle:hover {
-        background: #e0e0e0;
+        /* Light red background for highlighting */
+        .clickable-case.highlighted {
+            background-color: #fdd;
         }
 
         /* ==================== 数学公式样式 ==================== */
         .latex-style {
-        font-family: "Cambria Math", "Latin Modern Math", serif;
-        font-size: 1.1em;
-        color: #333;
+            font-family: "Cambria Math", "Latin Modern Math", serif;
+            font-size: 1.1em;
+            color: #333;
         }
 
         .frac {
-        display: inline-block;
-        position: relative;
-        text-align: center;
-        vertical-align: middle;
-        margin: 0 0.2em;
+            display: inline-block;
+            position: relative;
+            text-align: center;
+            vertical-align: middle;
+            margin: 0 0.2em;
         }
 
         .numerator {
-        display: block;
-        padding: 0 0.5em;
-        border-bottom: 1px solid;
+            display: block;
+            padding: 0 0.5em;
+            border-bottom: 1px solid;
         }
 
         .denominator {
-        display: block;
-        padding: 0 0.5em;
+            display: block;
+            padding: 0 0.5em;
         }
 
         .latex-var {
-        font-style: italic;
-        padding-right: 0.3em;
+            font-style: italic;
+            padding-right: 0.3em;
         }
+
 
         /* ==================== 状态和提示样式 ==================== */
         .error { color: red; }
@@ -260,6 +201,125 @@
         .status-content.warning { color: orange; }
         .status-content.success { color: green; }
 
+
+        /* ==================== 页脚样式 ==================== */
+
+        .site-footer {
+            margin-top: 50px;
+            padding: 30px 0;
+            border-top: 1px solid #eaeaea;
+            background-color: #f9f9f9;
+        }
+
+        .footer-links {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .footer-links a {
+            color: #2c3e50;
+            text-decoration: none;
+            font-size: 0.95em;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #3498db;
+            text-decoration: underline;
+        }
+
+        /* ==================== 侧边面板样式 ==================== */
+        /* 通用面板样式 */
+        .qa-panel,
+        .definition-panel {
+            position: fixed;
+            top: 0;
+            right: -350px;
+            width: 260px;
+            height: 100vh;
+            background: white;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+            transition: right 0.3s ease;
+            z-index: 1000;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .qa-panel.active,
+        .definition-panel.active {
+            right: 0;
+        }
+
+        /* 内容区域 */
+        .qa-content,
+        .definition-content {
+            padding-top: 20px;
+        }
+
+        .qa-item,
+        .definition-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .qa-question,
+        .definition-term {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .qa-answer,
+        .definition-description {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        /* ==================== 控制按钮 ==================== */
+        /* 切换按钮 */
+        .qa-toggle,
+        .definition-toggle {
+            cursor: pointer;
+            padding: 6px 12px;
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .qa-toggle:hover,
+        .definition-toggle:hover {
+            background: #e0e0e0;
+        }
+
+        .language-btn {
+            padding: 6px 12px;
+            font-size: 16px;
+            background: #f4f4f4;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .engine-btn {
+            position: absolute;           /* 绝对定位 */
+            top: 32px;                       /* 顶部对齐 */
+            left: 16px;                     /* 右边对齐 */
+            padding: 6px 12px;
+            font-size: 16px;              /* 使用更大字体（你原来优先级较高） */
+            background: #f4f4f4;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
         .highlight-box {
         display: inline-block;
         padding: 2px 6px;
@@ -269,62 +329,15 @@
         background: #f8f9fe;
         }
 
-        /* ==================== 页脚样式 ==================== */
-        .site-footer {
-        margin-top: 50px;
-        padding: 30px 0;
-        border-top: 1px solid #eaeaea;
-        background-color: #f9f9f9;
-        }
-
-        .footer-links {
-        max-width: 800px;
-        margin: 0 auto;
-        text-align: center;
-        display: flex;
-        justify-content: center;
-        gap: 30px;
-        }
-
-        .footer-links a {
-        color: #2c3e50;
-        text-decoration: none;
-        font-size: 0.95em;
-        transition: color 0.3s ease;
-        }
-
-        .footer-links a:hover {
-        color: #3498db;
-        text-decoration: underline;
-        }
-
-        /* ==================== 响应式设计 ==================== */
-        @media (max-width: 600px) {
-        .page-container {
-            flex-direction: column;
-        }
-        
-        .footer-links {
-            flex-direction: column;
-            gap: 15px;
-        }
-        
-        .qa-panel,
-        .definition-panel {
-            width: 80%;
-            right: -100%;
-        }
-        }
-
-        /* Light red background for highlighting */
-        .clickable-case.highlighted {
-        background-color: #fdd;
-        }
-
-
+        /* ==================== 顶部结构辅助布局 ==================== */
         .paper-header {
             text-align: center; /* 整体内容居中 */
         }
+
+        .title-wrapper {
+            position: relative;
+            text-align: center;      /* 标题居中 */
+            }
 
         .authors-container {
             position: relative; /* 为绝对定位按钮提供参考 */
@@ -333,42 +346,12 @@
             margin-top: 10px; /* 根据实际需要调整与标题的间距 */
         }
 
-        .title-wrapper {
-            position: relative;
-            text-align: center;      /* 标题居中 */
-            }
-
-        .paper-title {
-        margin: 0;
-        }
-
         .language-link {
-        position: absolute;
-        top: 0;
-        right: 0;
+            position: absolute;
+            top: 0;
+            right: 0;
         }
-
-        .language-btn {
-        padding: 6px 12px;
-        font-size: 16px;
-        background: #f4f4f4;
-        border: 2px solid #ccc;
-        border-radius: 4px;
-        cursor: pointer;
-        }
-
-        .engine-btn {
-        position: absolute;           /* 绝对定位 */
-        top: 32px;                       /* 顶部对齐 */
-        left: 16px;                     /* 右边对齐 */
-        padding: 6px 12px;
-        font-size: 16px;              /* 使用更大字体（你原来优先级较高） */
-        background: #f4f4f4;
-        border: 2px solid #ccc;
-        border-radius: 4px;
-        cursor: pointer;
-        }
-
+        /* ==================== 加载面板 ==================== */
         #loading-panel {
             position: fixed;
             top: 80px;
@@ -399,19 +382,46 @@
             white-space: pre-wrap;
         }
 
+        /* ==================== 响应式设计 ==================== */
+        @media (max-width: 600px) {
+        .page-container {
+            flex-direction: column;
+        }
+        
+        .footer-links {
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .qa-panel,
+        .definition-panel {
+            width: 80%;
+            right: -100%;
+        }
+        }
     </style>
 </head>
+
+
 <body>
+
+    <!-- ==================== 固定在网页左上角，用于开关日志浮窗的按钮 ==================== -->
     <button id="toggle-loading-panel-btn" class="engine-btn" style="margin-right: 10px;">运行日志</button>
-    <!-- ==================== 论文标题和作者 ==================== -->
+
+    <!-- ==================== 论文标题和语言切换 ==================== -->
     <div class="paper-header">
+
         <div class="title-wrapper">
           <h1 class="paper-title">三元纠错码</h1>
           <a href="index_SEC_TED_en.html" class="language-link">
             <button class="language-btn">语言：中文</button>
           </a>
         </div>
+
       </div>
+
+
+    <!-- ==================== 作者 ==================== -->
         <div class="authors-container"> <!-- 新增容器包裹作者和按钮 -->
             <div class="authors">
                 <span class="author">胡佳旭</span>
@@ -419,15 +429,22 @@
                 <span class="author">Kenneth J. Roche</span>
             </div>
         </div>
+
+
     <!-- ==================== D4 固定面板 ==================== -->
     <div class="d4-section">
+
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; gap: 10px;">
+
             <h1 style="flex-grow: 1;">单纠错三检测码(最小距离4)</h1>
+
             <div style="display: flex; gap: 5px;">
                 <button id="definitionToggleBtn" class="definition-toggle" onclick="toggleDefinition()">定义 ▼</button>
                 <button id="qaToggleBtn" class="qa-toggle" onclick="toggleQA()">常见问题 ▼</button>
             </div>
+            
         </div>
+
         <div>
             该版本可以在码字中<strong>存在且仅存在一位</strong>错误时，准确定位并<strong>纠正</strong>该错误（SEC）；当码字中错误数量<strong>不超过三位</strong>时，可确保<strong>检测</strong>到错误存在（TED）。
             更详细的介绍请见
@@ -437,47 +454,75 @@
 
         <!-- 编码部分 -->
         <div class="encode-section">
+
             <h2>编译 D4</h2>
+
             <div class="input-instructions">
                 示例： "02110010221011221"  
                 <button onclick="d4_encoding_generate_Random_Ternary()" style="margin-left: 10px;">生成随机信息</button>
             </div>
-            <div><strong>三进制信息</strong></div>
+
+            <div>
+                <strong>三进制信息</strong>
+            </div>
+
             <input type="text" id="d4_inputMessage" placeholder="长度至少为3位" style="flex-grow: 1;">
-            <button onclick="D4_construct_runEncode()">编译</button>
+            <button class="pending-btn" data-action="D4_construct_runEncode()" data-label="编译">加载中...</button>
             <button onclick="document.getElementById('d4_inputMessage').value = ''">清除</button>
 
 
             <div id="d4_encode_Output"></div>
+
         </div>
 
         <!-- 解码部分 -->
         <div class="decode-section">
+
             <h2>解译 D4</h2>
+
             <div class="input-instructions">
                 示例： "2020211001022210112220"
             </div>
-            <div><strong>D4 纠错码</strong></div>
+
+            <div>
+                <strong>D4 纠错码</strong>
+            </div>
+
             <input type="text" id="d4_inputCode" placeholder="长度至少为8位">
-            <button onclick="D4_EC_runDecode()">解译</button>
+            <button class="pending-btn" data-action="D4_EC_runDecode()" data-label="解译">加载中...</button>
             <button onclick="document.getElementById('d4_inputCode').value = ''">清除</button>
+
             <div id="d4_decode_output"></div>
         </div>
 
 
         <div id="qaPanel" class="qa-panel">
+
             <div id="qaContent" class="qa-content">
+
                 <h3 style="display: flex; justify-content: space-between; align-items: center;">
                     <span>常见问题</span>
                     <button class="close-btn" onclick="toggleQA()">X</button>
-                  </h3>
+                </h3>
 
                 <div class="qa-item">
-                    <div class="qa-question">Q1: 如何进行编译?</div>
-                    <div class="qa-answer">A1: 输入任意至少三位的三进制信息后点击"编译"即可生成纠错码</div>
+
+                    <div class="qa-question">
+                        Q1: 如何进行编译?
+                    </div>
+
+                    <div class="qa-answer">
+                        A1: 输入任意至少三位的三进制信息后点击"编译"即可生成纠错码
+                    </div>
+
                 </div>
+
                 <div class="qa-item">
-                    <div class="qa-question">Q2: 如何进行解译？它的作用是？</div>
+
+                    <div class="qa-question">
+                        Q2: 如何进行解译？它的作用是？
+                    </div>
+
                     <div class="qa-answer">
                         A1: 输入任何包含少许错误位的<strong style="color: black;">纠错码</strong> (从编译部分生成)后点击"解译"：
                         <ul style="margin-top: 8px; margin-bottom: 8px; padding-left: 20px;">
@@ -488,98 +533,146 @@
                           <li><strong>4+位错误：</strong> 超出本编码的纠错检测范围。</li>
                         </ul>
                         该版本可以<strong>纠正一位错误</strong>或<strong>检测三位错误</strong>。
-                      </div>                
-                </div>
+                    </div>
 
+                </div>
                 <!-- 更多Q&A项... -->
             </div>
         </div>
 
         <div id="definitionPanel" class="definition-panel">
+
             <div id="definitionContent" class="definition-content">
+
                 <h3 style="display: flex; justify-content: space-between; align-items: center;">
                     <span>关键定义</span>
                     <button class="close-btn" onclick="toggleDefinition()">X</button>
-                  </h3>
+                </h3>
 
                 <!-- 定义1：Error Correction Code -->
                 <div class="definition-item">
-                    <div class="definition-term"><strong>纠错码</strong></div>
+
+                    <div class="definition-term">
+                        <strong>纠错码</strong>
+                    </div>
+
                     <div class="definition-description">
                         一种纠错技术，通过在信息中添加“冗余数据”作为代价，使接受方可以检测或纠正传输或储存过程中产生的错误。
                     </div>
+
                 </div>
         
                 <!-- 定义2：Efficiency -->
                 <div class="definition-item">
-                    <div class="definition-term"><strong>码率</strong></div>
+
+                    <div class="definition-term">
+                        <strong>码率</strong>
+                    </div>
+
                     <div class="definition-description">
                         码率是原信息位数与编译后总位数的比率:<br>
+
                         <div class="latex-style">
                             <span class="latex-var">码率</span> = 
                             <span class="frac">
                               <span class="numerator">原信息位数</span>
                               <span class="denominator">编译后总位数</span>
                             </span>
-                          </div>
+                        </div>
+
                         码率越高意味着冗余越少，信息传输效率更高。
+
                     </div>
+
                 </div>
         
                 <!-- 定义3：Hamming Distances -->
                 <div class="definition-item">
-                    <div class="definition-term"><strong>最小汉明距离</strong></div>
+
+                    <div class="definition-term">
+                        <strong>最小汉明距离</strong>
+                    </div>
+
                     <div class="definition-description">
                         纠错码的最小汉明距离或最小距离表示从一个有效码字变为另一个相同长度的有效码字最少需要改变的位数。<br>
                         <strong>D3:</strong> 最小距离等于3 (SEC-DED, 单纠错双检测码)<br>
                         <strong>D4:</strong> 最小距离等于4 (SEC-TED, 单纠错三检测码)
                     </div>
+                    
                 </div>
+
             </div>
+
         </div>
 
 
         <!-- 加载状态 -->
-            <div id="loading-panel">
-                <h3 style="margin-top: 0;">运行日志</h3>
-                <div id="loading-log">开始中...</div>
-            </div>
+        <div id="loading-panel">
+
+            <h3 style="margin-top: 0;">运行日志</h3>
+
+            <div id="loading-log">启动中...</div>
+
+        </div>
 
     </div>
 
     <!-- ==================== D3 折叠面板 ==================== -->
     <details class="operation-section">
+
         <summary><h1>单纠错双检测码(更高的码率)</h1></summary>
+
         <div>
             
             <div>
                 该版本可以在码字中<strong>存在且仅存在一位</strong>错误时，准确定位并<strong>纠正</strong>该错误（SEC）；当码字中错误数量<strong>不超过两位</strong>时，可确保<strong>检测</strong>到错误存在（DED）。 更详细的介绍请见<a href="https://placeholderhere" target="_blank" rel="noopener noreferrer">论文</a>的<strong>4.1节</strong>。
-            </div>        
+            </div>      
+
         <!-- 编码部分 -->
         <div class="encode-section">
+
             <h2>编译 D3</h2>
+
             <div class="input-instructions">
                 示例： "2100212002202121021010202201111101121"
                 <button onclick="d3_encoding_generate_Random_Ternary()" style="margin-left: 10px;">生成随机信息</button>
             </div>
-            <div><strong>三进制信息</strong></div>
+
+            <div>
+                <strong>三进制信息</strong>
+            </div>
+
             <input type="text" id="inputMessage" placeholder="长度至少为2位">
-            <button onclick="D3_construct_runEncode()">编译</button>
+            <button class="pending-btn" data-action="D3_construct_runEncode()" data-label="编译">加载中...</button>
             <button onclick="document.getElementById('inputMessage').value = ''">清除</button>
-            <div id="encodeOutput"></div>
+
+            <div id="encodeOutput">
+
+            </div>
+
         </div>
 
         <!-- 解码部分 -->
         <div class="decode-section">
+
             <h2>解译 D3</h2>
+
             <div class="input-instructions">
                 示例： "222100021200202021210210102022011111011221"
             </div>
-            <div><strong>D3 纠错码</strong></div>
+
+            <div>
+                <strong>D3 纠错码</strong>
+            </div>
+
             <input type="text" id="inputCode" placeholder="长度至少为4位">
-            <button onclick="D3_EC_runDecode()">解译</button>
+            <button class="pending-btn" data-action="D3_EC_runDecode()" data-label="解译">加载中...</button>
             <button onclick="document.getElementById('inputCode').value = ''">清除</button>
-            <div id="output"></div>
+
+            <div id="output">
+
+            </div>
+
         </div>
     </details>
 
@@ -592,10 +685,32 @@
     </footer>
 
 
+<!------------------------------------------------------------------------------------------->    
+<!------------------------------------------------------------------------------------------->  
+<!------------------------------------------------------------------------------------------->  
+<!------------------------------------------------------------------------------------------->  
+<!------------------------------------------------------------------------------------------->  
+<!------------------------------------------------------------------------------------------->  
+                                                
     <script>
         let pyodide;
         let pyodideReady = false;
 
+        //激活所有的Loading/加载中按钮
+        function activatePendingButtons() {
+        document.querySelectorAll('.pending-btn').forEach(button => {
+            const action = button.dataset.action;
+            const label = button.dataset.label;
+
+            if (action && label) {
+            button.innerText = label;
+            button.setAttribute('onclick', action);
+            button.disabled = false;
+            }
+        });
+        }
+
+        //将输入信息印在日志/Log中
         function logLoading(message) {
             const logDiv = document.getElementById("loading-log");
             if (logDiv) {
@@ -604,7 +719,7 @@
             }
         }
 
-
+        //启动Pyodide并在日志/Log上汇报进度
         async function initializePyodide() {
             logLoading("正在加载 Pyodide...");
             pyodide = await loadPyodide({
@@ -643,9 +758,12 @@
             if (logDiv) {
                 logDiv.innerHTML += `<h3 style="margin-top: 0; font-size: 20px; font-family: sans-serif;">历史记录</h3>`;
             }
-            logLoading("Testing...");
 
-            // 隐藏浮窗
+
+            activatePendingButtons();//激活按钮
+
+
+            // 完成加载的两秒后隐藏浮窗
             setTimeout(() => {
             const panel = document.getElementById("loading-panel");
             if (panel) {
@@ -654,6 +772,7 @@
             }, 2000);
         }
         
+        //检测输入值是否符合要求
         function validateInput(input,minlength) {
             // 检查输入长度
             if (input.length < minlength) {
@@ -668,6 +787,7 @@
             return true;
         }
 
+        //根据输入值运行python，捕捉输出值并展示
         async function D4_construct_runEncode() {
             const input = document.getElementById('d4_inputMessage').value;
             const outputDiv = document.getElementById('d4_encode_Output');
@@ -706,6 +826,7 @@
             }
         }
 
+        //---------------------------------------------------------------------------------------------------------------
         async function D4_EC_runDecode() {
 
             // 在解码开始前获取当前折叠状态
@@ -1263,4 +1384,5 @@
         initializePyodide();
     </script>
 </body>
+
 </html>

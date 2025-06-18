@@ -5,252 +5,195 @@
     <title>Ternary Error Correction Code</title>
     <script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"></script>
     <style>
-        /* ==================== 全局样式 ==================== */
+        /* ==================== 全局基础样式 ==================== */
         body {
-        max-width: 800px;
-        margin: 20px auto;
-        padding: 20px;
-        font-family: sans-serif;
-        line-height: 1.6;
-        color: #333;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            font-family: sans-serif;
+            line-height: 1.6;
+            color: #333;
         }
 
-        /* ==================== 布局样式 ==================== */
-        .page-container {
-        display: flex;
-        align-items: flex-start;
-        gap: 20px;
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-        }
-
-        /* ==================== 标题和文本样式 ==================== */
-        .paper-title {
-        text-align: center;
-        font-size: 2em;
-        color: #2c3e50;
-        margin: 0 0 20px;
-        font-weight: 600;
-        letter-spacing: -0.5px;
-        }
-
-        .authors {
-        text-align: center;
-        margin-bottom: 20px;
-        font-size: 1.1em;
-        color: #7f8c8d;
-        }
-
-        .author {
-        display: inline-block;
-        margin: 0 10px;
-        }
-
-        .separator {
-        color: #bdc3c7;
-        font-weight: 300;
-        }
+        /* ==================== 文字与标题样式 ==================== */
 
         h1 { font-size: 1.6em; margin-bottom: 20px; }
         h2 { font-size: 1.3em; margin: 1em 0 0.5em; }
         h3 { font-size: 1.1em; margin: 1em 0 0.5em; }
         sub { vertical-align: baseline; font-size: 0.8em; }
 
-        /* ==================== 功能模块样式 ==================== */
-        /* 主内容区 */
-        .d4-section {
-        flex: 1;
-        margin: 20px 0;
-        padding: 15px;
-        border: 2px solid #ddd;
-        border-radius: 6px;
+        .paper-title {
+            text-align: center;
+            font-size: 2em;
+            color: #2c3e50;
+            margin: 0;
+            font-weight: 600;
+            letter-spacing: -0.5px;
         }
 
-        /* 折叠面板 */
+        .authors {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            color: #7f8c8d;
+        }
+
+        .author {
+            display: inline-block;
+            margin: 0 10px;
+        }
+
+        .separator {
+            color: #bdc3c7;
+            font-weight: 300;
+        }
+
+
+        .input-instructions {
+            font-size: 0.9em;
+            color: #666;
+            margin: 8px 0 16px;
+        }
+
+
+        /* ==================== 布局与容器样式 ==================== */
+        .page-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .d4-section {
+            flex: 1;
+            margin: 20px 0;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+        }
+
+        /* ==================== 折叠面板（details）样式 ==================== */
+
         details.operation-section {
-        border: 2px solid #ddd;
-        border-radius: 6px;
-        padding: 10px;
-        margin: 20px 0;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            padding: 10px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         details.operation-section summary {
-        cursor: pointer;
-        padding: 10px 10px 10px 28px;
-        list-style: none;
-        position: relative;
+            cursor: pointer;
+            padding: 10px 10px 10px 28px;
+            list-style: none;
+            position: relative;
         }
-
 
         details.operation-section summary::before {
-                content: "▶";
-                position: absolute;
-                left: 10px;
-                top: 50%;
-                transform: translateY(-50%);
-                color: #0033ff;
-                }
-
-        details.operation-section[open] summary::before {
-                content: "▼";
-                }    
-
-
-        /* 编码/解码区块 */
-        .encode-section,
-        .decode-section {
-        margin-top: 20px;
-        padding: 15px;
-        background: #f8f8f8;
-        border-radius: 4px;
-        border: 1px solid #eee;
+            content: "▶";
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #0033ff;
         }
 
-        .input-instructions {
-        font-size: 0.9em;
-        color: #666;
-        margin: 8px 0 16px;
+        details.operation-section[open] summary::before {
+            content: "▼";
+        }
+
+        /* ==================== 编码 / 解码模块 ==================== */
+
+        .encode-section,
+        .decode-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f8f8;
+            border-radius: 4px;
+            border: 1px solid #eee;
         }
 
         /* ==================== 表格样式 ==================== */
+
         .analysis-table {
-        margin: 20px 0;
+            margin: 20px 0;
         }
 
         .analysis-table table {
-        border-collapse: collapse;
-        width: 100%;
-        margin: 15px auto;
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px auto;
         }
 
         .analysis-table th,
         .analysis-table td {
-        border: 1px solid #000;
-        padding: 8px;
-        text-align: center;
-        vertical-align: middle;
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: center;
+            vertical-align: middle;
         }
 
         .analysis-table caption {
-        font-weight: bold;
-        margin-bottom: 10px;
+            font-weight: bold;
+            margin-bottom: 10px;
         }
 
         .clickable-case {
-        cursor: pointer;
-        transition: all 0.2s ease;
-        min-width: 80px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 80px;
         }
 
         .clickable-case:hover {
-        background-color: rgba(0, 51, 255, 0.08);
+            background-color: rgba(0, 51, 255, 0.08);
         }
 
         .clickable-case.active {
-        background-color: rgba(0, 51, 255, 0.15);
-        box-shadow: inset 0 0 0 2px #0033ff;
+            background-color: rgba(0, 51, 255, 0.15);
+            box-shadow: inset 0 0 0 2px #0033ff;
         }
 
-        /* ==================== 侧边面板样式 ==================== */
-        /* 通用面板样式 */
-        .qa-panel,
-        .definition-panel {
-        position: fixed;
-        top: 0;
-        right: -350px;
-        width: 260px;
-        height: 100vh;
-        background: white;
-        box-shadow: -2px 0 10px rgba(0,0,0,0.1);
-        transition: right 0.3s ease;
-        z-index: 1000;
-        padding: 20px;
-        overflow-y: auto;
-        }
-
-        .qa-panel.active,
-        .definition-panel.active {
-        right: 0;
-        }
-
-        /* 内容区域 */
-        .qa-content,
-        .definition-content {
-        padding-top: 20px;
-        }
-
-        .qa-item,
-        .definition-item {
-        margin-bottom: 15px;
-        padding-bottom: 15px;
-        border-bottom: 1px solid #eee;
-        }
-
-        .qa-question,
-        .definition-term {
-        font-weight: bold;
-        color: #2c3e50;
-        margin-bottom: 5px;
-        }
-
-        .qa-answer,
-        .definition-description {
-        color: #7f8c8d;
-        font-size: 0.9em;
-        line-height: 1.5;
-        }
-
-        /* 切换按钮 */
-        .qa-toggle,
-        .definition-toggle {
-        cursor: pointer;
-        padding: 6px 12px;
-        background: #f0f0f0;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 14px;
-        transition: all 0.3s;
-        }
-
-        .qa-toggle:hover,
-        .definition-toggle:hover {
-        background: #e0e0e0;
+        /* Light red background for highlighting */
+        .clickable-case.highlighted {
+            background-color: #fdd;
         }
 
         /* ==================== 数学公式样式 ==================== */
+
         .latex-style {
-        font-family: "Cambria Math", "Latin Modern Math", serif;
-        font-size: 1.1em;
-        color: #333;
+            font-family: "Cambria Math", "Latin Modern Math", serif;
+            font-size: 1.1em;
+            color: #333;
         }
 
         .frac {
-        display: inline-block;
-        position: relative;
-        text-align: center;
-        vertical-align: middle;
-        margin: 0 0.2em;
+            display: inline-block;
+            position: relative;
+            text-align: center;
+            vertical-align: middle;
+            margin: 0 0.2em;
         }
 
         .numerator {
-        display: block;
-        padding: 0 0.5em;
-        border-bottom: 1px solid;
+            display: block;
+            padding: 0 0.5em;
+            border-bottom: 1px solid;
         }
 
         .denominator {
-        display: block;
-        padding: 0 0.5em;
+            display: block;
+            padding: 0 0.5em;
         }
 
         .latex-var {
-        font-style: italic;
-        padding-right: 0.3em;
+            font-style: italic;
+            padding-right: 0.3em;
         }
 
         /* ==================== 状态和提示样式 ==================== */
+
         .error { color: red; }
         .success { color: green; }
         .warning { color: orange; }
@@ -260,42 +203,182 @@
         .status-content.warning { color: orange; }
         .status-content.success { color: green; }
 
-        .highlight-box {
-        display: inline-block;
-        padding: 2px 6px;
-        border: 2px solid #2c7be5;
-        border-radius: 4px;
-        margin: 0 2px;
-        background: #f8f9fe;
-        }
-
         /* ==================== 页脚样式 ==================== */
+
         .site-footer {
-        margin-top: 50px;
-        padding: 30px 0;
-        border-top: 1px solid #eaeaea;
-        background-color: #f9f9f9;
+            margin-top: 50px;
+            padding: 30px 0;
+            border-top: 1px solid #eaeaea;
+            background-color: #f9f9f9;
         }
 
         .footer-links {
-        max-width: 800px;
-        margin: 0 auto;
-        text-align: center;
-        display: flex;
-        justify-content: center;
-        gap: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
         }
 
         .footer-links a {
-        color: #2c3e50;
-        text-decoration: none;
-        font-size: 0.95em;
-        transition: color 0.3s ease;
+            color: #2c3e50;
+            text-decoration: none;
+            font-size: 0.95em;
+            transition: color 0.3s ease;
         }
 
         .footer-links a:hover {
-        color: #3498db;
-        text-decoration: underline;
+            color: #3498db;
+            text-decoration: underline;
+        }
+
+        /* ==================== 侧边面板（Q&A、定义） ==================== */
+        /* 通用面板样式 */
+
+        .qa-panel,
+        .definition-panel {
+            position: fixed;
+            top: 0;
+            right: -350px;
+            width: 260px;
+            height: 100vh;
+            background: white;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+            transition: right 0.3s ease;
+            z-index: 1000;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .qa-panel.active,
+        .definition-panel.active {
+            right: 0;
+        }
+
+        /* 内容区域 */
+        .qa-content,
+        .definition-content {
+            padding-top: 20px;
+        }
+
+        .qa-item,
+        .definition-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .qa-question,
+        .definition-term {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .qa-answer,
+        .definition-description {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        /* ==================== 控制按钮 ==================== */
+        /* 切换按钮 */
+        .qa-toggle,
+        .definition-toggle {
+            cursor: pointer;
+            padding: 6px 12px;
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .qa-toggle:hover,
+        .definition-toggle:hover {
+            background: #e0e0e0;
+        }
+
+        .language-btn {
+            position: absolute;           /* 绝对定位 */
+            top: 0;                       /* 顶部对齐 */
+            right: 0;                     /* 右边对齐 */
+            padding: 6px 12px;
+            font-size: 16px;              /* 使用更大字体（你原来优先级较高） */
+            background: #f4f4f4;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .engine-btn {
+            position: absolute;           /* 绝对定位 */
+            top: 32px;                       /* 顶部对齐 */
+            left: 16px;                     /* 右边对齐 */
+            padding: 6px 12px;
+            font-size: 16px;              /* 使用更大字体（你原来优先级较高） */
+            background: #f4f4f4;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+
+        /* ==================== 顶部结构辅助布局 ==================== */
+
+        .paper-header {
+            text-align: center; /* 整体内容居中 */
+        }
+
+        .title-wrapper {
+            position: relative;
+            text-align: center;      /* 标题居中 */
+        }    
+
+        .authors-container {
+            position: relative; /* 为绝对定位按钮提供参考 */
+            display: flex;
+            justify-content: center; /* 作者信息居中 */
+            margin-top: 10px; /* 根据实际需要调整与标题的间距 */
+        }
+
+        .language-link {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+        /* ==================== 加载面板 ==================== */
+        #loading-panel {
+            position: fixed;
+            top: 80px;
+            left: 10px;
+            width: 220px;
+            padding: 15px;
+            background: #f5f5f5;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
+            z-index: 999;
+            font-size: 14px;
+            color: #333;
+            transition: left 0.5s ease, opacity 0.5s ease;
+        }
+
+        #loading-panel.hidden {
+            opacity: 0;
+            pointer-events: none;
+            left: -250px;
+        }
+
+        #loading-log {
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
         }
 
         /* ==================== 响应式设计 ==================== */
@@ -316,91 +399,6 @@
         }
         }
 
-        /* Light red background for highlighting */
-        .clickable-case.highlighted {
-        background-color: #fdd;
-        }
-
-
-        .paper-header {
-            text-align: center; /* 整体内容居中 */
-        }
-
-        .authors-container {
-            position: relative; /* 为绝对定位按钮提供参考 */
-            display: flex;
-            justify-content: center; /* 作者信息居中 */
-            margin-top: 10px; /* 根据实际需要调整与标题的间距 */
-        }
-
-        .title-wrapper {
-            position: relative;
-            text-align: center;      /* 标题居中 */
-            }
-
-        .paper-title {
-        margin: 0;
-        }
-
-        .language-link {
-        position: absolute;
-        top: 0;
-        right: 0;
-        }
-
-        .language-btn {
-        position: absolute;           /* 绝对定位 */
-        top: 0;                       /* 顶部对齐 */
-        right: 0;                     /* 右边对齐 */
-        padding: 6px 12px;
-        font-size: 16px;              /* 使用更大字体（你原来优先级较高） */
-        background: #f4f4f4;
-        border: 2px solid #ccc;
-        border-radius: 4px;
-        cursor: pointer;
-        }
-
-        .engine-btn {
-        position: absolute;           /* 绝对定位 */
-        top: 32px;                       /* 顶部对齐 */
-        left: 16px;                     /* 右边对齐 */
-        padding: 6px 12px;
-        font-size: 16px;              /* 使用更大字体（你原来优先级较高） */
-        background: #f4f4f4;
-        border: 2px solid #ccc;
-        border-radius: 4px;
-        cursor: pointer;
-        }
-
-        #loading-panel {
-            position: fixed;
-            top: 80px;
-            left: 10px;
-            width: 220px;
-            padding: 15px;
-            background: #f5f5f5;
-            border: 2px solid #ccc;
-            border-radius: 8px;
-            box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
-            z-index: 999;
-            font-size: 14px;
-            color: #333;
-            transition: left 0.5s ease, opacity 0.5s ease;
-            }
-
-        #loading-panel.hidden {
-            opacity: 0;
-            pointer-events: none;
-            left: -250px;
-        }
-
-        #loading-log {
-            max-height: 300px;
-            overflow-y: auto;
-            font-family: monospace;
-            font-size: 13px;
-            white-space: pre-wrap;
-        }
     </style>
 </head>
 <body>
@@ -452,7 +450,8 @@
             </div>
             <div><strong>Ternary Message</strong></div>
             <input type="text" id="d4_inputMessage" placeholder="Minimum Length: 3" style="flex-grow: 1;">
-            <button onclick="D4_construct_runEncode()">Encode</button>
+            <button class="pending-btn" data-action="D4_construct_runEncode()" data-label="Encode">Loading...</button>
+            
             <button onclick="document.getElementById('d4_inputMessage').value = ''">Clear</button>
 
 
@@ -467,7 +466,7 @@
             </div>
             <div><strong>D4 Code</strong></div>
             <input type="text" id="d4_inputCode" placeholder="Minimum Length: 8">
-            <button onclick="D4_EC_runDecode()">Decode</button>
+            <button class="pending-btn" data-action="D4_EC_runDecode()" data-label="Decode">Loading...</button>
             <button onclick="document.getElementById('d4_inputCode').value = ''">Clear</button>
             <div id="d4_decode_output"></div>
         </div>
@@ -577,7 +576,7 @@
             </div>
             <div><strong>Ternary Message</strong></div>
             <input type="text" id="inputMessage" placeholder="Minimum Length: 2">
-            <button onclick="D3_construct_runEncode()">Encode</button>
+            <button class="pending-btn" data-action="D3_construct_runEncode()" data-label="Encode">Loading...</button>
             <button onclick="document.getElementById('inputMessage').value = ''">Clear</button>
             <div id="encodeOutput"></div>
         </div>
@@ -590,7 +589,7 @@
             </div>
             <div><strong>D3 Code</strong></div>
             <input type="text" id="inputCode" placeholder="Minimum Length: 4">
-            <button onclick="D3_EC_runDecode()">Decode</button>
+            <button class="pending-btn" data-action="D3_EC_runDecode()" data-label="Decode">Loading...</button>
             <button onclick="document.getElementById('inputCode').value = ''">Clear</button>
             <div id="output"></div>
         </div>
@@ -611,6 +610,19 @@
     <script>
         let pyodide;
         let pyodideReady = false;
+
+        function activatePendingButtons() {
+        document.querySelectorAll('.pending-btn').forEach(button => {
+            const action = button.dataset.action;
+            const label = button.dataset.label;
+
+            if (action && label) {
+            button.innerText = label;
+            button.setAttribute('onclick', action);
+            button.disabled = false;
+            }
+        });
+        }
 
         function logLoading(message) {
             const logDiv = document.getElementById("loading-log");
@@ -658,6 +670,10 @@
             if (logDiv) {
                 logDiv.innerHTML += `<h3 style="margin-top: 0; font-size: 20px; font-family: sans-serif;">History</h3>`;
             }
+
+
+            activatePendingButtons();
+
 
             // 隐藏浮窗
             setTimeout(() => {
